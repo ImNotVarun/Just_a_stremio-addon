@@ -51,27 +51,18 @@ builder.defineStreamHandler(function (args) {
     const id = args.id;
 
     if (id.startsWith("m3u8:")) {
-        const baseUrl = "https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/";
-        const streams = [
-            {
-                title: "1080p",
-                url: baseUrl + "master_1080p.m3u8",
-                isLive: true
-            },
-            {
-                title: "4k",
-                url: baseUrl + "master_2160p.m3u8",
-                isLive: true
-            },
-            {
-                title: "720p",
-                url: baseUrl + "master_720p.m3u8",
-                isLive: true
-            }
-        ];
+        const streamUrl = id.replace("m3u8:", "");
+        console.log(`Serving stream URL: ${streamUrl}`);
 
-        console.log(`Serving streams for ID: ${id}`);
-        return Promise.resolve({ streams });
+        return Promise.resolve({
+            streams: [
+                {
+                    title: "Live Stream",
+                    url: streamUrl,
+                    isLive: true
+                }
+            ]
+        });
     } else {
         console.log('No streams available for ID:', id);
         return Promise.resolve({ streams: [] });
