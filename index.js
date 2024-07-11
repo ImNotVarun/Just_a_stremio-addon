@@ -14,7 +14,7 @@ const manifest = {
             name: "Bigg Boss Live",
             type: "movie",
             extra: [{ name: "search" }],
-            poster: "https://www.bollyzone.tv/wp-content/uploads/2024/06/Bigg-Boss-OTT-3-poster-252x300.jpg"
+            poster: "https://github.com/ImNotVarun/BiggBosslive_stremio/assets/135236953/5e0b7834-18cf-4f03-914a-c9947f5ca676"
         }
     ]
 };
@@ -30,9 +30,9 @@ builder.defineCatalogHandler(args => {
                     id: "m3u8:https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8",
                     name: "Bigg Boss Live Stream",
                     type: "movie",
-                    poster: "https://www.bollyzone.tv/wp-content/uploads/2024/06/Bigg-Boss-OTT-3-poster-252x300.jpg",
-                    background: "https://www.bollyzone.tv/wp-content/uploads/2024/06/Bigg-Boss-OTT-3.jpg",
-                    logo: "https://www.news.keralatv.in/media/2022/03/big-boss-4-logo-280x158.jpg",
+                    poster: "https://github.com/ImNotVarun/BiggBosslive_stremio/assets/135236953/5e0b7834-18cf-4f03-914a-c9947f5ca676",
+                    background: "https://github.com/ImNotVarun/BiggBosslive_stremio/assets/135236953/9594e56f-ee28-410e-ad2f-7c671f29113e",
+                    logo: "https://github.com/ImNotVarun/BiggBosslive_stremio/assets/135236953/227abcb4-3f45-4ac1-b07e-10dfb17822b3",
                     description: "Watch Bigg Boss live 24/7",
                     releaseInfo: "Live",
                     imdbRating: "6.0",
@@ -51,18 +51,27 @@ builder.defineStreamHandler(function (args) {
     const id = args.id;
 
     if (id.startsWith("m3u8:")) {
-        const streamUrl = id.replace("m3u8:", "");
-        console.log(`Serving stream URL: ${streamUrl}`);
+        const baseUrl = "https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/";
+        const streams = [
+            {
+                title: "1080p",
+                url: baseUrl + "master_2160p.m3u8",
+                isLive: true
+            },
+            {
+                title: "4k",
+                url: baseUrl + "master_1080p.m3u8",
+                isLive: true
+            },
+            {
+                title: "720p",
+                url: baseUrl + "master_720p.m3u8",
+                isLive: true
+            }
+        ];
 
-        return Promise.resolve({
-            streams: [
-                {
-                    title: "Live Stream",
-                    url: streamUrl,
-                    isLive: true
-                }
-            ]
-        });
+        console.log(`Serving streams for ID: ${id}`);
+        return Promise.resolve({ streams });
     } else {
         console.log('No streams available for ID:', id);
         return Promise.resolve({ streams: [] });
