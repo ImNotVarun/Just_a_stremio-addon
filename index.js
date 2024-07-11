@@ -3,8 +3,8 @@ const { addonBuilder, serveHTTP } = require("stremio-addon-sdk");
 const manifest = {
     id: "org.myaddon.m3u8",
     version: "1.0.0",
-    name: "M3U8 Link Player",
-    description: "A Stremio addon to play M3U8 links",
+    name: "BiggBoss_24/7",
+    description: "A Stremio addon to play BiggBosslive 24/7",
     resources: ["stream", "catalog"],
     types: ["movie", "series"],
     idPrefixes: ["m3u8:"],
@@ -35,7 +35,7 @@ builder.defineCatalogHandler(args => {
                     logo: "https://www.news.keralatv.in/media/2022/03/big-boss-4-logo-280x158.jpg",
                     description: "Watch Bigg Boss live 24/7",
                     releaseInfo: "Live",
-                    imdbRating: "N/A",
+                    imdbRating: "6.0",
                     genres: ["Reality TV"]
                 }
             ]
