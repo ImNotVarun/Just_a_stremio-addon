@@ -14,7 +14,7 @@ const manifest = {
             name: "Bigg Boss Live",
             type: "movie",
             extra: [{ name: "search" }],
-            poster: "https://www.bollyzone.tv/wp-content/uploads/2024/06/Bigg-Boss-OTT-3-poster-252x300.jpg" // Default poster for the catalog
+            poster: "https://www.bollyzone.tv/wp-content/uploads/2024/06/Bigg-Boss-OTT-3-poster-252x300.jpg"
         }
     ]
 };
@@ -37,8 +37,7 @@ builder.defineCatalogHandler(args => {
                     releaseInfo: "Live",
                     imdbRating: "N/A",
                     genres: ["Reality TV"]
-                },
-                // Add more items as needed
+                }
             ]
         });
     } else {
@@ -71,11 +70,10 @@ builder.defineStreamHandler(function (args) {
 });
 
 // Set up the server using serveHTTP
-const port = 7000;
+const port = process.env.PORT || 7000;
 
 serveHTTP(builder.getInterface(), { port }).then(server => {
     console.log(`Addon server is running on http://localhost:${port}`);
-    console.log(`Manifest URL: http://localhost:${port}/manifest.json`);
 }).catch(error => {
     console.error("Failed to start the server:", error);
 });
