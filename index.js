@@ -90,20 +90,23 @@ builder.defineStreamHandler(({ id }) => {
     if (id.startsWith('cs:')) {
         const stream = streams.find(s => s.id === id);
         if (stream) {
-            let streamUrl = '';
+            let streamUrls = [];
             if (id === 'cs:match1') {
-                streamUrl = 'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8';
+                streamUrls = [
+                    'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8',
+                    'https://prod-ent-live-gm.jiocinema.com/hls/live/2105484/uhd_akamai_atv_avc_eptv_bbhindi_day22/master.m3u8'
+                ];
             } else if (id === 'cs:match2') {
-                streamUrl = 'https://trl01.pctrls.nl:443/procricket/amlst:stream_4_b4550000/playlist.m3u8?vidictid=199153280917&id=4&pk=2FB5E1E3F4AC8AEFAF78C26D5016E249DDA33443AF88CBD5FAB14F74765296EB&userId=ddf77f37-8498-42ee-93d8-b7e34912df39';
+                streamUrls = [
+                    'https://trl01.pctrls.nl:443/procricket/amlst:stream_4_b4550000/playlist.m3u8?vidictid=199153280917&id=4&pk=2FB5E1E3F4AC8AEFAF78C26D5016E249DDA33443AF88CBD5FAB14F74765296EB&userId=ddf77f37-8498-42ee-93d8-b7e34912df39'
+                ];
             }
             return Promise.resolve({
-                streams: [
-                    {
-                        title: stream.name,
-                        url: streamUrl,
-                        isLive: true
-                    }
-                ]
+                streams: streamUrls.map(url => ({
+                    title: stream.name,
+                    url: url,
+                    isLive: true
+                }))
             });
         }
     }
