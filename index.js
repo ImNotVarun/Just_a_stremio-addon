@@ -3,7 +3,7 @@ const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
 // Define the manifest for the addon
 const manifest = {
     id: 'org.myaddon.cricketstreams',
-    version: '1.0.0',
+    version: '1.0.1',
     name: 'CricketStreams_24/7',
     description: 'A Stremio addon to play cricket streams',
     resources: ['catalog', 'meta', 'stream'],
