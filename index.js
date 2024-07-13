@@ -98,7 +98,7 @@ builder.defineStreamHandler(({ id }) => {
                 ];
             } else if (id === 'cs:match2') {
                 streamUrls = [
-                    'https://trl01.pctrls.nl:443/procricket/amlst:stream_4_b4550000/playlist.m3u8?vidictid=199153280917&id=4&pk=2FB5E1E3F4AC8AEFAF78C26D5016E249DDA33443AF88CBD5FAB14F74765296EB&userId=ddf77f37-8498-42ee-93d8-b7e34912df39'
+                    'https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8'
                 ];
             }
             return Promise.resolve({
