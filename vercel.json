@@ -4,12 +4,23 @@
         {
             "src": "index.js",
             "use": "@vercel/node"
+        },
+        {
+            "src": "api/updateStreams.js",
+            "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
             "dest": "/index.js"
+        }
+    ],
+    "crons": [
+        {
+            "path": "/api/updateStreams",
+            "schedule": "0 14 * * *",
+            "timezone": "Asia/Kolkata"
         }
     ],
     "env": {
