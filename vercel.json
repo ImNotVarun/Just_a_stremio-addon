@@ -8,15 +8,11 @@
     ],
     "routes": [
         {
-            "handle": "filesystem"
-        },
-        {
             "src": "/(.*)",
             "dest": "/index.js"
         }
     ],
     "env": {
-        "NODE_ENV": "production",
-        "PORT": "7000"
+        "NODE_ENV": "production"
     }
 }

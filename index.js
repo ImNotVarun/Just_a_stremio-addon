@@ -1,4 +1,10 @@
 const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
+const fs = require('fs');
+const path = require('path');
+
+// Load the configuration file
+const configPath = path.resolve(__dirname, 'config.json');
+const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
 // Define the manifest for the addon
 const manifest = {
@@ -90,18 +96,7 @@ builder.defineStreamHandler(({ id }) => {
     if (id.startsWith('cs:')) {
         const stream = streams.find(s => s.id === id);
         if (stream) {
-            let streamUrls = [];
-            if (id === 'cs:match1') {
-                streamUrls = [
-                    'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8',
-                    'https://prod-ent-live-gm.jiocinema.com/hls/live/2105484/uhd_akamai_atv_avc_eptv_bbhindi_day22/master.m3u8'
-                ];
-            } else if (id === 'cs:match2') {
-                streamUrls = [
-                    'https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8',
-                    'https://dai.google.com/ssai/event/QNEZiPzpTXucyrbpCjdZTw/master.m3u8'
-                ];
-            }
+            const streamUrls = config.streams[id] || [];
             return Promise.resolve({
                 streams: streamUrls.map(url => ({
                     title: stream.name,
@@ -114,20 +109,7 @@ builder.defineStreamHandler(({ id }) => {
     return Promise.resolve({ streams: [] });
 });
 
-// Set up the server using serveHTTP
-const port = process.env.PORT || 7000;
-
-serveHTTP(builder.getInterface(), { port }).then(() => {
-    console.log(`Addon server is running on http://localhost:${port}`);
-}).catch(error => {
-    console.error('Failed to start the server:', error);
-});
-
-// Error handling for uncaught exceptions and unhandled rejections
-process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
+// Serve the addon
+module.exports = (req, res) => {
+    serveHTTP(builder.getInterface(), { req, res });
+};
