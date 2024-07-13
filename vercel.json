@@ -19,8 +19,7 @@
     "crons": [
         {
             "path": "/api/updateStreams",
-            "schedule": "0 14 * * *",
-            "timezone": "Asia/Kolkata"
+            "schedule": "0 14 * * *"
         }
     ],
     "env": {
