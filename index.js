@@ -98,7 +98,8 @@ builder.defineStreamHandler(({ id }) => {
                 ];
             } else if (id === 'cs:match2') {
                 streamUrls = [
-                    'https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8'
+                    'https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8',
+                    'https://dai.google.com/ssai/event/QNEZiPzpTXucyrbpCjdZTw/master.m3u8'
                 ];
             }
             return Promise.resolve({
