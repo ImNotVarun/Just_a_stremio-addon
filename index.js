@@ -109,7 +109,20 @@ builder.defineStreamHandler(({ id }) => {
     return Promise.resolve({ streams: [] });
 });
 
-// Serve the addon
-module.exports = (req, res) => {
-    serveHTTP(builder.getInterface(), { req, res });
-};
+// Set up the server using serveHTTP
+const port = process.env.PORT || 7000;
+
+serveHTTP(builder.getInterface(), { port }).then(() => {
+    console.log(`Addon server is running on http://localhost:${port}`);
+}).catch(error => {
+    console.error('Failed to start the server:', error);
+});
+
+// Error handling for uncaught exceptions and unhandled rejections
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
