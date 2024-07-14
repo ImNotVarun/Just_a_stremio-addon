@@ -1,25 +1,27 @@
 const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
 const fs = require('fs');
 const path = require('path');
+const CronJob = require('cron').CronJob;
 
 // Load the configuration file
 const configPath = path.resolve(__dirname, 'config.json');
-const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+let config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
 // Define the manifest for the addon
 const manifest = {
     id: 'org.myaddon.cricketstreams',
     version: '1.0.1',
-    name: 'CricketStreams_24/7',
-    description: 'A Stremio addon to play cricket streams',
+    name: 'Live_TV',
+    description: 'A Stremio addon to Live Streams streams',
     resources: ['catalog', 'meta', 'stream'],
     types: ['movie'],
     idPrefixes: ['cs:'],
+    logo: 'https://open-store.io/icons/stremio.jhayproject/stremio.jhayproject-1.0.0.png',
     catalogs: [
         {
             type: 'movie',
             id: 'cricket',
-            name: 'Cricket Streams'
+            name: 'Cricstream'
         }
     ]
 };
@@ -38,9 +40,36 @@ const streams = [
         name: 'Cricket',
         type: 'movie',
         poster: 'https://media.gettyimages.com/id/1435854596/photo/india-v-pakistan-icc-mens-t20-world-cup.jpg?s=1024x1024&w=gi&k=20&c=99J0tacpwRdfql_dj6-IDK2lMhSbFRFJj7ux7xxC3zc=',
-        description: 'Watch England vs Pakistan live!'
+        description: 'Watch Cricket Live'
     }
 ];
+
+// Function to update stream links
+const updateStreamLinks = () => {
+    const now = new Date();
+    console.log('Updating stream links at', now.toISOString());
+
+    for (const match in config.streams) {
+        config.streams[match] = config.streams[match].map(stream => {
+            if (stream.url === 'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8') {
+                return stream;
+            }
+            if (stream.url.includes('_day')) {
+                const parts = stream.url.split('_day');
+                const dayNumber = parseInt(parts[1].slice(0, 2), 10);
+                const newDayNumber = `day${(dayNumber + 1).toString().padStart(2, '0')}`;
+                return { ...stream, url: `${parts[0]}_${newDayNumber}${parts[1].slice(2)}` };
+            }
+            return stream;
+        });
+    }
+
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf-8');
+    console.log('Stream links updated successfully');
+};
+
+// Schedule the update to run at 8:00 PM IST every day
+new CronJob('0 20 * * *', updateStreamLinks, null, true, 'Asia/Kolkata');
 
 // Define metadata for movies
 const getMovieMeta = (id) => {
@@ -98,9 +127,9 @@ builder.defineStreamHandler(({ id }) => {
         if (stream) {
             const streamUrls = config.streams[id] || [];
             return Promise.resolve({
-                streams: streamUrls.map(url => ({
-                    title: stream.name,
-                    url: url,
+                streams: streamUrls.map(streamObj => ({
+                    title: streamObj.name,
+                    url: streamObj.url,
                     isLive: true
                 }))
             });

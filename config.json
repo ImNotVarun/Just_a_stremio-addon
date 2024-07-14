@@ -1,12 +1,36 @@
 {
     "streams": {
         "cs:match1": [
-            "https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8",
-            "https://prod-ent-live-gm.jiocinema.com/hls/live/2105484/uhd_akamai_atv_avc_eptv_bbhindi_day23/master.m3u8"
+            {
+                "name": "Bigg Boss 24/7 Live",
+                "url": "https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8"
+            },
+            {
+                "name": "Latest Episode Live",
+                "url": "https://prod-ent-live-gm.jiocinema.com/hls/live/2105484/uhd_akamai_atv_avc_eptv_bbhindi_day23/master.m3u8"
+            }
         ],
         "cs:match2": [
-            "https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8",
-            "https://dai.google.com/ssai/event/QNEZiPzpTXucyrbpCjdZTw/master.m3u8"
+            {
+                "name": "Sony Hindi",
+                "url": "https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8"
+            },
+            {
+                "name": "Sony English",
+                "url": "https://dai.google.com/ssai/event/QNEZiPzpTXucyrbpCjdZTw/master.m3u8"
+            },
+            {
+                "name": "Fox cricket",
+                "url": "http://185.114.147.139:3050/nova67427@hot.rr.com/zYzHkUpCJq/609345?token=TBdbWBBdEl4VBFZTCwBUAwUEBQcEUQcGVwgAVVMBAlBWB1JbWwxTUwcVHEZAFkdWUV45ClEXWARWCAtVAxhBRkRQQWYKURJeFQEAVwRXFx8SRw8OUBdYA1EDCFgFBlsHDhkRSQpREl4VAAZUB1oXHxJWHhdQRwxTCm5cBEBdAFYVD11MD1kcRlhZbwBWD1RdVBFcQQUXThAPQkhDDFoWX1sZEVsKQUIFQ1ISXhFTDQUBEUpBVloXXBJDQUMMFip9FRkRXBtBVQpEXl8KEVgXR0MRSkFcRj1AA0JME1NVDlZFFwkbUxccRlpWSDtQDVtdVVASClpbERBcEwxDGhYOXFlcR1YRakANUxUKRgJTAQMJERs="
+            },
+            {
+                "name": "Fox cricket 2",
+                "url": "http://185.114.147.139:3050/nova67427@hot.rr.com/zYzHkUpCJq/609347?token=TBdbWBBdEl4VDgAABwRXAVEABFEEUVYDUwBdBw9WVwNWDQdYAAxSUwUVHEZAFkdWUV45ClEXWARWCAtVARhBRkRQQWYKURJeFQEAVwRXFx8SRw8OUBdYA1EDCFgFAVYDAxkRSQpREl4VAQNSAloXHxJWHhdQRwxTCm5cBEBdAFYVD11MD1kcRlhZbwBWD1RdVBFcQQUXThAPQkhDDFoWX1sZEVsKQUIFQ1ISXhFUBwQDEUpBVloXXBJDQUMMFip9FRkRXBtBVQpEXl8KEVgXR0MRSkFcRj1AA0JME1NVDlZFFwkbUxccRlpWSDtQDVtdVVASClpbERBcEwxDGhYOXFlcR1YRakANUxUKRgJTAQcJERs="
+            },
+            {
+                "name": "Willow cricket",
+                "url": "http://143.244.35.186:3050/nova67427@hot.rr.com/zYzHkUpCJq/418212?token=TBdbWBBdEl4VVlFVV1RXUlYLXwUFV1EBBwIIVA8FAAsPAgtaWgYJB1IVHEZAFkdWUV45ClEXWAZXCQpQBBhBRkRQQWYKURJeFQEAVwRXFx8SRw8OUBdYA1EDCFgFAVAEAxkRSQpREl4VBgFSAVADERwRAxtBUBBcB11nBVNCClBSFwlXFllcSBVYXjtXB1hSXldEWRcFQB5EWEsRFA4NRltZHxsBXEQWVkNVRglAAAEDB0RPF1YNRwhFShgUDkF6eRcfGwZNRAFZRFkLXUAPEURARE8XXBFtFFRLFURRAl5SRxEDQQUSSBVaURxsAVpdXlYFF1xaDEFECxpVFBhBXlhbWk0MR28UXlMSXhFaBAUAERs="
+            }
         ]
     }
 }
