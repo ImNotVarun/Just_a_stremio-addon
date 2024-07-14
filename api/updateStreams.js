@@ -7,37 +7,29 @@ let config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
 const updateStreamLinks = () => {
     const now = new Date();
-    const currentISTTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-    const hour = currentISTTime.getHours();
+    console.log('Updating stream links at', now.toISOString());
 
-    // Run the update if it is 8:00 PM IST
-    if (hour === 20) {
-        console.log('Updating stream links at', currentISTTime.toISOString());
-
-        for (const match in config.streams) {
-            config.streams[match] = config.streams[match].map(url => {
-                // Skip the URL that should not be updated
-                if (url === 'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8') {
-                    return url;
-                }
-                if (url.includes('_day')) {
-                    const parts = url.split('_day');
-                    const dayNumber = parseInt(parts[1].slice(0, 2), 10);
-                    const newDayNumber = `day${(dayNumber + 1).toString().padStart(2, '0')}`;
-                    return `${parts[0]}_${newDayNumber}${parts[1].slice(2)}`;
-                }
+    for (const match in config.streams) {
+        config.streams[match] = config.streams[match].map(url => {
+            // Skip the URL that should not be updated
+            if (url === 'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8') {
                 return url;
-            });
-        }
-
-        fs.writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf-8');
-        console.log('Stream links updated successfully');
-    } else {
-        console.log('Not 8:00 PM IST yet, skipping update.');
+            }
+            if (url.includes('_day')) {
+                const parts = url.split('_day');
+                const dayNumber = parseInt(parts[1].slice(0, 2), 10);
+                const newDayNumber = `day${(dayNumber + 1).toString().padStart(2, '0')}`;
+                return `${parts[0]}_${newDayNumber}${parts[1].slice(2)}`;
+            }
+            return url;
+        });
     }
+
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf-8');
+    console.log('Stream links updated successfully');
 };
 
 module.exports = (req, res) => {
     updateStreamLinks();
-    res.status(200).send('Stream links checked');
+    res.status(200).send('Stream links checked and updated');
 };
