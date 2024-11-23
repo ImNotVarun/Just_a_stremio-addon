@@ -4,6 +4,25 @@ const path = require('path');
 const CronJob = require('cron').CronJob;
 const https = require('https');
 const http = require('http');
+const os = require('os');
+
+// Function to get local IP address
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name of Object.keys(interfaces)) {
+        for (const interface of interfaces[name]) {
+            // Skip internal and non-IPv4 addresses
+            if (interface.family === 'IPv4' && !interface.internal) {
+                return interface.address;
+            }
+        }
+    }
+    return '127.0.0.1'; // Fallback to localhost
+}
+
+const LOCAL_IP = getLocalIP();
+const port = process.env.PORT || 7000;
+const PUBLIC_URL = `http://${LOCAL_IP}:${port}`;
 
 // Load the configuration file
 const configPath = path.resolve(__dirname, 'config.json');
@@ -25,10 +44,24 @@ const manifest = {
             id: 'cricket',
             name: 'Cricstream'
         }
-    ]
+    ],
+    // Add these properties for better Android/TV compatibility
+    behaviorHints: {
+        adult: false,
+        p2p: false
+    }
 };
 
-// Define your stream items and metadata in one place
+// Function to modify acestream URLs for cross-device compatibility
+function processAceStreamUrl(url) {
+    if (url.includes('127.0.0.1:6878') || url.includes('localhost:6878')) {
+        // Replace localhost/127.0.0.1 with the local IP address
+        return url.replace(/(?:127\.0\.0\.1|localhost):6878/, `${LOCAL_IP}:6878`);
+    }
+    return url;
+}
+
+// Rest of your streamData object remains the same
 const streamData = {
     'cs:match1': {
         id: 'cs:match1',
@@ -54,100 +87,19 @@ const streamData = {
     }
 };
 
-// Helper function to fetch and process M3U8 content
-async function processM3U8(url) {
-    return new Promise((resolve, reject) => {
-        const protocol = url.startsWith('https') ? https : http;
-        
-        protocol.get(url, (res) => {
-            let data = '';
-            
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-            
-            res.on('end', () => {
-                const lines = data.split('\n');
-                const baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
-                
-                const processedLines = lines.map(line => {
-                    if (line.startsWith('api.php?ts=')) {
-                        return line.replace('api.php?ts=', '');
-                    } else if (line.trim() && !line.startsWith('#')) {
-                        return line.startsWith('http') ? line : baseUrl + line;
-                    }
-                    return line;
-                });
-                
-                resolve(processedLines.join('\n'));
-            });
-            
-            res.on('error', reject);
-        }).on('error', reject);
-    });
-}
-
-// Function to update stream links
-const updateStreamLinks = () => {
-    const now = new Date();
-    console.log('Updating stream links at', now.toISOString());
-
-    for (const match in config.streams) {
-        config.streams[match] = config.streams[match].map(stream => {
-            if (stream.url === 'https://prod-ent-live-gm.jiocinema.com/hls/live/2105483/uhd_akamai_atv_avc_24x7_bbhindi_day01/master.m3u8') {
-                return stream;
-            }
-            if (stream.url.includes('_day')) {
-                const parts = stream.url.split('_day');
-                const dayNumber = parseInt(parts[1].slice(0, 2), 10);
-                const newDayNumber = `day${(dayNumber + 1).toString().padStart(2, '0')}`;
-                return { ...stream, url: `${parts[0]}_${newDayNumber}${parts[1].slice(2)}` };
-            }
-            return stream;
-        });
-    }
-
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf-8');
-    console.log('Stream links updated successfully');
-};
-
-// Schedule the update
-new CronJob('0 20 * * *', updateStreamLinks, null, true, 'Asia/Kolkata');
-
-// Initialize the addon builder
-const builder = new addonBuilder(manifest);
-
-// Define the catalog handler
-builder.defineCatalogHandler(({ type, id }) => {
-    if (type === 'movie' && id === 'cricket') {
-        return Promise.resolve({ metas: Object.values(streamData) });
-    } else {
-        return Promise.resolve({ metas: [] });
-    }
-});
-
-// Define the meta handler
-builder.defineMetaHandler(({ type, id }) => {
-    if (type === 'movie' && streamData[id]) {
-        return Promise.resolve({ meta: streamData[id] });
-    }
-    return Promise.resolve({ meta: null });
-});
-
-// Define the stream handler
+// Modified stream handler for cross-device compatibility
 builder.defineStreamHandler(async ({ id }) => {
     if (id.startsWith('cs:') && config.streams[id]) {
         const streamUrls = config.streams[id] || [];
         try {
             const processedStreams = await Promise.all(
                 streamUrls.map(async (streamObj) => {
-                    let finalUrl = streamObj.url;
+                    let finalUrl = processAceStreamUrl(streamObj.url);
                     
                     if (streamObj.url.includes('port.denver1769.in') || 
                         (streamObj.url.endsWith('.m3u8') && !streamObj.url.includes('jiocinema'))) {
                         try {
-                            await processM3U8(streamObj.url);
-                            finalUrl = streamObj.url;
+                            await processM3U8(finalUrl);
                             console.log(`Successfully processed M3U8 for ${streamObj.name}`);
                         } catch (error) {
                             console.error(`Error processing M3U8 for ${streamObj.name}:`, error);
@@ -171,19 +123,26 @@ builder.defineStreamHandler(async ({ id }) => {
     return { streams: [] };
 });
 
-// Set up the server
-const port = process.env.PORT || 7000;
-
+// Modified server startup
 serveHTTP(builder.getInterface(), { port })
     .then(() => {
-        console.log(`Addon server is running on http://localhost:${port}`);
+        console.log(`
+=========================================
+Addon server is running!
+Local URL: http://127.0.0.1:${port}
+Network URL: ${PUBLIC_URL}
+
+For Android/TV, use the Network URL:
+${PUBLIC_URL}
+=========================================
+        `);
     })
     .catch(error => {
         console.error('Failed to start the server:', error);
         process.exit(1);
     });
 
-// Error handling
+// Keep your existing error handlers
 process.on('uncaughtException', (error) => {
     console.error('Uncaught Exception:', error);
 });
