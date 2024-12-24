@@ -12,28 +12,8 @@
         ],
         "cs:match2": [
             {
-                "name": "Sony Hindi",
-                "url": "https://dai.google.com/ssai/event/g1cPcUIdSQC_3FXsrgV5iA/master.m3u8"
-            },
-            {
-                "name": "Sony English",
-                "url": "https://dai.google.com/ssai/event/QNEZiPzpTXucyrbpCjdZTw/master.m3u8"
-            },
-            {
-                "name": "Sky Sports Cricket 60Fps",
-                "url": "http://127.0.0.1:6878/ace/r/610eefafd6602c094e8e89c249a11d635cb6fe29/93d9f4847f90788463e99b951f10e109"
-            },
-            {
-                "name": "Sky Sports Cricket-2 60Fps",
-                "url": "http://127.0.0.1:6878/content/610eefafd6602c094e8e89c249a11d635cb6fe29/0.43044097645492463"
-            },
-            {
-                "name": "Fox cricket 60Fps",
-                "url": "https://1e31ae68a2754705105de96640de4c3c.angelthump.com/hls/MjAyNC0xMS0yM1QwNTowODo0MC45NTZaYXJjaGllc2hvdHM=_archieshots/index.m3u8"
-            },
-            {
-                "name": "Willow cricket 60Fps",
-                "url": "http://23.227.140.75:3050/nova67427@hot.rr.com/zYzHkUpCJq/418212"
+                "name": "Sky Sports (NZ) 60Fps",
+                "url": "https://charronbhai.io:443/iosa.php/skynz1/stream.m3u8?uid=1405979274&u=aditya&p=83cb700c6bcd48157d40e911a929d2377d9c902fa7c1fad2484a609a426ee456"
             }
         ]
     }
