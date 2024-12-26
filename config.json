@@ -12,8 +12,12 @@
         ],
         "cs:match2": [
             {
-                "name": "Fox cricket 60Fps",
+                "name": "fox 60Fps",
                 "url": "https://m118753.protect-cdn.net/live/m4-720p.m3u8"
+            },
+            {
+                "name": "Sky Sports NZ 60Fps",
+                "url": "https://charronbhai.io:443/iosa.php/skynz1/stream.m3u8?uid=3128447760&u=aditya&p=83cb700c6bcd48157d40e911a929d2377d9c902fa7c1fad2484a609a426ee456"
             },
             {
                 "name": "7+",
